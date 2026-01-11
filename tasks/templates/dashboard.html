@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title> {% block title %}{% endblock title %}</title>
     <link rel="stylesheet" href="{% static "css/output.css" %}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,6 +13,9 @@
 </head>
 <body>
     <header class="">
+        {% block title %}
+        <p>dashboard</p>
+        {% endblock title %}
         <nav class="bg-black flex justify-evenly items-center p-6">
             <div class="flex justify-evenly items-center gap-6 md:gap-8 lg:gap-12">
                 <a href="{%url 'dashboard'%}?type=all"><h4 class="text-white font-bold">Dashboard</h4></a>
