@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -91,17 +92,24 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 
 # for postgrespl
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'event_management',
-        'USER': 'postgres',
-        'PASSWORD': 'zuel',
-        'HOST': 'localhost',
-        'PORT': '5432'
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'event_management',
+#         'USER': 'postgres',
+#         'PASSWORD': 'zuel',
+#         'HOST': 'localhost',
+#         'PORT': '5432'
+#     }
+# }
 
+DATABASES = {
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default='postgresql://organizer_dashboard_db_user:DjJAzDweE1xqACc41eBqueh9tDDQO8B1@dpg-d5hu4tdactks7397j0fg-a.oregon-postgres.render.com/organizer_dashboard_db',
+        conn_max_age=600
+    )
+}
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
