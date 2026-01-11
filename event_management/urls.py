@@ -26,5 +26,8 @@ urlpatterns = [
     
     path('admin/',admin.site.urls),
     path('tasks/',include("tasks.urls")),
-] + debug_toolbar_urls()
+] 
+
+if settings.DEBUG:
+    urlpatterns += debug_toolbar_urls()
 
