@@ -21,9 +21,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from debug_toolbar.toolbar import debug_toolbar_urls
 urlpatterns = [
-    path('home/',home),
+    path('',home,name='home'),
     path('search/', search_view, name='search_view'),
-    
     path('admin/',admin.site.urls),
     path('tasks/',include("tasks.urls")),
 ] 
