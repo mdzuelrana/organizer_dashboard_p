@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.log
+
+# Virtual environment
+event_venev/
+venv/
+env/
+
+# Node
+node_modules/
+package-lock.json
+
+# Django
+staticfiles/
+media/
+.env
+
+# OSg
+.DS_Store
+Thumbs.db

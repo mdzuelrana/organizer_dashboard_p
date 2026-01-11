@@ -1,0 +1,51 @@
+{% extends "dashboard.html" %}
+{% load static %}
+{% block dash %}
+<div class="flex justify-center items-center w-auto">
+    <div class="bg-white p-5 m-4 rounded-xl shadow hover:shadow-lg transition">
+                            <img src=" {% static "images/image.png" %} " alt="" class="w-full object-cover">
+                            <h3 class="text-xl font-bold mb-2">Name: {{ event.name }}</h3>
+                            
+                            <p class="text-gray-600 text-sm mb-1">
+                                {{ event.date }} | {{ event.time }}
+                            </p>
+
+                            <p class="text-gray-600 text-sm mb-1">
+                                <span>Location: </span>{{ event.location }}
+                            </p>
+
+                            <p class="text-gray-600 text-sm mb-2">
+                                <span>Category: </span> <span class="font-medium">{{ event.category.name }}</span>
+                            </p>
+                            <p class="text-gray-600 text-sm mb-2">
+                                <span>Description: </span> <span class="font-medium">{{ event.description }}</span>
+                            </p>
+
+                            <div class="flex justify-between items-center gap-6 ">
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                                    {{ event.participant.count }} Participants
+                                </span>
+
+                                <span>
+                                    <a href="{% url 'update_event' event.id %}" class="text-blue-600 font-bold hover:underline text-sm">
+                                    Update Event
+                                </a>
+                                </span>
+                                
+                                {% comment %} <span>
+                                    <a href="{% url 'delete_event' event.id %}" class="text-red-600 font-bold hover:underline text-sm">
+                                    Delete Event
+                                </a>
+                                </span> {% endcomment %}
+                                <form action="{% url 'delete_event' event.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button class="text-red-600 font-bold hover:underline text-sm">
+                                        Delete Event
+                                    </button>
+                                </form>
+
+                              
+                            </div>
+    </div>
+</div>
+{% endblock dash %}

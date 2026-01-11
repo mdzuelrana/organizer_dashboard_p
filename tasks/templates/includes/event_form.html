@@ -1,0 +1,35 @@
+{% extends "dashboard.html" %}
+{% block dash %}
+{% load static %}
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static "css/output.css" %}">
+</head> {% endcomment %}
+{% comment %} <body class="flex justify-center items-center"> {% endcomment %}
+    <div class="w-1/2 mx-auto mt-8 ">
+        <p>
+            {% if messages %}
+                {% for message in messages %}
+                <div class="px-2 py-1 {% if message.tags == 'success' %}bg-green-500{% endif %}"><p>{{message}}</p></div>
+                {% endfor %}
+            {% endif %}
+        </p>
+        <form method="POST" class="">
+            {% comment %} <input type="text" class="border-2 border-gray-300 w-full rounded-lg shadow-sm focus:border-rose-500 focus:ring-rose-500"> {% endcomment %}
+            {% csrf_token %}
+            {{event_form}}
+            {{update_form.as_p}}
+
+            
+            <button type="submit" class="shadow-lg rounded-sm p-3 mb-10 bg-blue-400 text-white w-full">Submit</button>
+        </form>
+        
+    </div>
+{% comment %} </body>
+</html> {% endcomment %}
+
+{% endblock dash %}

@@ -1,0 +1,80 @@
+from django.db import models
+
+# Create your models here.
+class Category(models.Model):
+    name=models.CharField(max_length=200)
+    description=models.TextField()
+    
+    def __str__(self):
+        return self.name
+
+class Participant(models.Model):
+    name=models.CharField(max_length=200)
+    email=models.EmailField(max_length=300,unique=True)
+    
+    def __str__(self):
+        return self.name
+    
+    
+class Event(models.Model):
+    name=models.CharField(max_length=200)
+    description=models.TextField()
+    date=models.DateField()
+    time=models.TimeField()
+    location=models.CharField(max_length=200)
+    category=models.ForeignKey(Category,on_delete=models.CASCADE,related_name='category')
+    participant=models.ManyToManyField(Participant,related_name='participant')
+    def __str__(self):
+        return self.name
+    
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+    
+# class Task(models.Model):
+#     STATUS_CHOICES=[
+#         ('PENDING','Pending'),
+#         ('IN_PROGRESS','In Progress'),
+#         ('COMPLETED','Completed')
+#     ]
+#     project=models.ForeignKey(Project,on_delete=models.CASCADE,default=1)
+#     assigned_to=models.ManyToManyField(Employee,related_name='tasks')
+#     title=models.CharField(max_length=200)
+#     description=models.TextField()
+#     due_date=models.DateField()
+#     status=models.CharField(max_length=15,choices=STATUS_CHOICES,default='PENDING')
+#     is_completed=models.BooleanField(default=False)
+#     created_at=models.DateTimeField(auto_now_add=True)
+#     updated_at=models.DateTimeField(auto_now=True)
+#     def __str__(self):
+#         return self.title
+
+# class TaskDetail(models.Model):
+#     HIGH='H'
+#     MEDIUM='M'
+#     LOW='L'
+#     PRIORITY_OPTIONS=(
+#         (HIGH,'High'),
+#         (MEDIUM,'Medium'),
+#         (LOW,'Low')
+#     )
+#     # std_id=models.CharField(max_length=200,primary_key=True)
+#     task=models.OneToOneField(Task,on_delete=models.CASCADE,related_name='details')
+#     # assigned_to=models.CharField(max_length=100)
+#     priority=models.CharField(max_length=1,choices=PRIORITY_OPTIONS,default=LOW)
+#     notes=models.TextField(blank=True,null=True)
+#     def __str__(self):
+#         return f'task detail{self.task.title}'
+
+

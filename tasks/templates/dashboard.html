@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static "css/output.css" %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="">
+        <nav class="bg-black flex justify-evenly items-center p-6">
+            <div class="flex justify-evenly items-center gap-6 md:gap-8 lg:gap-12">
+                <a href="{%url 'dashboard'%}?type=all"><h4 class="text-white font-bold">Dashboard</h4></a>
+                <a href="{%url 'create_event' %}" <h4 class="text-white font-bold">Create Event</h4> </a>
+                <a href="{%url 'event_task'%}?type=all"><h4 class="text-white font-bold">All Event</h4></a>
+                <a href="{%url 'event_task'%}?type=upcoming"><h4 class="text-white font-bold">Upcoming Event</h4></a>
+                <a href="{%url 'event_task'%}?type=past"><h4 class="text-white font-bold">Past Event</h4></a>
+
+            </div>
+            <div class="flex justify-evenly">
+                <form class="d-flex m-auto" method="GET" action="{% url 'search_view' %}">
+                    <input
+                    class="form-control ms-4 rounded-sm"
+                    type="search"
+                    name="q"
+                    placeholder="Search by name,location..."
+                    value="{{ request.GET.q }}"
+                    >
+                    > <button class="btn btn-primary rounded-sm shadow-2xl px-2 bg-blue-400 text-white" type="submit">Search</button> 
+                </form>
+            </div>
+        </nav>
+    </header>
+    <main class="m-6">
+        {% block dash %}
+        
+        {% endblock dash %}
+       
+        
+        
+
+    </main>
+</body>
+</html>
