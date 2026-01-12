@@ -51,7 +51,7 @@ class EventForm(StyledFormMixin,forms.ModelForm):
         }
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
-        self.fields['participant'].queryset = Participant.objects.order_by('name').distinct('name')
+        self.fields['participant'].queryset = Participant.objects.filter(participant__isnull=False).distinct()
         self.apply_styled_widgets()
 
 class ParticipantForm(forms.ModelForm):

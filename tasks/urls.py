@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
     path('dashboard/',dashboard,name='dashboard'),
-    path('create_event/',create_event),
+    path('create_event/',create_event,name='create_event'),
     path('event_task/',event_task,name='event_task'),
     path('view_details/<int:id>/',view_details,name='view_details'),
     path('delete_event/<int:id>/',delete_event,name='delete_event'),

@@ -157,7 +157,7 @@ def dashboard(request):
         participants=None
     elif filter_type == "participants":
         events = None
-        participants = Participant.objects.filter(participant__isnull=False).distinct()
+        participants = Participant.objects.all()
     else:
         events = base_query.all()
         participants=None
