@@ -138,10 +138,10 @@ def dashboard(request):
 
     
     counts = Event.objects.aggregate(
-        total_event=Count("id"),
-        upcoming_event=Count("id", filter=Q(date__gt=today)),
-        past_event=Count("id", filter=Q(date__lt=today)),
-        today_event=Count("id", filter=Q(date=today)),
+        total_event=Count("id",distinct=True),
+        upcoming_event=Count("id", filter=Q(date__gt=today),distinct=True),
+        past_event=Count("id", filter=Q(date__lt=today),distinct=True),
+        today_event=Count("id", filter=Q(date=today),distinct=True),
         total_participant=Count("participant",distinct=True)
     )
 

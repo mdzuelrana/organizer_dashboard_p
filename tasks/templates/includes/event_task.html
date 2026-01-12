@@ -4,7 +4,7 @@
 {% comment %} {% block title %}
 <p>all participant</p>
 {% endblock title %} {% endcomment %}
-<div class="bg-white p-6 rounded-xl shadow mt-6 w-auto">
+<div class="bg-white p-2 rounded-xl shadow mt-6 w-auto">
             {% if filter_type == "participants" %}
                     <div class="bg-white p-6 rounded-xl shadow mt-6">
                         <h2 class="text-xl font-semibold mb-4">All Participants</h2>
@@ -41,9 +41,9 @@
                     {{ filter_type }} Events
                 </h2>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-auto">
                     {% for event in events %}
-                    <div class="bg-white p-5 rounded-xl shadow hover:shadow-lg transition ">
+                    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition ">
                         <img src=" {% static "images/image.png" %} " alt="" class="object-cover">
                         <h3 class="text-xl font-bold mb-2">Name: {{ event.name }}</h3>
                         
