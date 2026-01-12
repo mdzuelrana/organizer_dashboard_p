@@ -19,7 +19,7 @@ from django.urls import path,include
 from tasks.views import home,search_view,dashboard
 from django.conf import settings
 from django.conf.urls.static import static
-from debug_toolbar.toolbar import debug_toolbar_urls
+# from debug_toolbar.toolbar import debug_toolbar_urls
 urlpatterns = [
     path('',dashboard,name='home'),
     path('search/', search_view, name='search_view'),
@@ -27,6 +27,11 @@ urlpatterns = [
     path('tasks/',include("tasks.urls")),
 ] 
 
+# Only import and include debug toolbar if DEBUG is True
 if settings.DEBUG:
-    urlpatterns += debug_toolbar_urls()
+    import debug_toolbar
+    urlpatterns = [path('__debug__/', include(debug_toolbar.urls))] + urlpatterns
 
+# Serve static files in development
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
