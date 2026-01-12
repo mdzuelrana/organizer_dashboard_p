@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse,HttpRequest
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.utils.timezone import now
 from tasks.forms import EventForm,ParticipantForm,CategoryForm
 from tasks.models import Event,Participant,Category
