@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse,HttpRequest
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.core.management import call_command
 from django.utils.timezone import now
 from tasks.forms import EventForm,ParticipantForm,CategoryForm
 from tasks.models import Event,Participant,Category
@@ -10,7 +11,9 @@ from django.db.models import Q,Max,Min,Avg,Count
 # Create your views here.
 def home(request):
     return HttpResponse('What are you doing?')
-
+def load_data(request):
+    call_command('loaddata', 'initial_data.json')
+    return HttpResponse("Data loaded successfully!")
 def create_admin(request):
     if not User.objects.filter(username="admin").exists():
         User.objects.create_superuser(
