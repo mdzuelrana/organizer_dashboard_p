@@ -9,6 +9,18 @@ from django.db.models import Q,Max,Min,Avg,Count
 # Create your views here.
 def home(request):
     return HttpResponse('What are you doing?')
+
+def create_admin(request):
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser(
+            username="admin",
+            email="admin@example.com",
+            password="admin1234"
+        )
+        return HttpResponse("Superuser created")
+    return HttpResponse("Superuser already exists")
+
+
 def update_event(request,id):
     event=Event.objects.get(id=id)
     update_form=EventForm(instance=event)
