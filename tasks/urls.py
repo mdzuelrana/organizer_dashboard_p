@@ -1,9 +1,9 @@
 from django.urls import path
-from .views import dashboard,create_event,event_task,search_view,view_details,delete_event,update_event,create_admin,load_data
+from .views import organizer_dashboard,create_event,event_task,search_view,view_details,delete_event,update_event,create_admin,load_data
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
-    path('dashboard/',dashboard,name='dashboard'),
+    path('organizer_dashboard/',organizer_dashboard,name='organizer_dashboard'),
     path('create_event/',create_event,name='create_event'),
     path('event_task/',event_task,name='event_task'),
     path('view_details/<int:id>/',view_details,name='view_details'),

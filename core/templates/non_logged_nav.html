@@ -1,0 +1,73 @@
+{% load static %}
+<header class="bg-white shadow-md">
+      <nav class="container mx-auto px-6 py-3">
+        <div class="flex justify-between items-center">
+          <div class="text-xl font-bold text-gray-800">TaskMaster</div>
+          <div class="hidden md:flex space-x-4">
+            <a href="#" class="text-gray-600 hover:text-gray-800">Features</a>
+            <a href="#" class="text-gray-600 hover:text-gray-800">Pricing</a>
+            <a href="#" class="text-gray-600 hover:text-gray-800">About</a>
+            <a href="#" class="text-gray-600 hover:text-gray-800">Contact</a>
+          </div>
+          <div class="md:hidden">
+            <button
+              id="menu-toggle"
+              class="text-gray-600 hover:text-gray-800 focus:outline-none"
+            >
+              {% comment %} <svg
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16m-7 6h7"
+                ></path>
+              </svg> {% endcomment %}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              </svg>
+
+            </button>
+          </div>
+          <div class="flex gap-1">
+            <a
+              href="{% url 'sign_in' %}"
+              class="hidden md:block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+              >Sign In</a
+            >
+            <a
+              href="{% url 'sign_up' %}"
+              class="hidden md:block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+              >Sign Up</a
+            >
+          </div>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden mt-4">
+          <a href="#" class="block py-2 text-gray-600 hover:text-gray-800"
+            >Features</a
+          >
+          <a href="#" class="block py-2 text-gray-600 hover:text-gray-800"
+            >Pricing</a
+          >
+          <a href="#" class="block py-2 text-gray-600 hover:text-gray-800"
+            >About</a
+          >
+          <a href="#" class="block py-2 text-gray-600 hover:text-gray-800"
+            >Contact</a
+          >
+          <a href="{% url 'sign_in' %}" class="block py-2 text-gray-600 hover:text-gray-800"
+            >Sign In</a
+          >
+          <a href="{% url 'sign_up' %}" class="block py-2 text-gray-600 hover:text-gray-800"
+            >Sign Up</a
+          >
+        </div>
+      </nav>
+    </header>
+
+

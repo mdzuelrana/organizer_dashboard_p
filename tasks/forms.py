@@ -1,13 +1,26 @@
 from django import forms
 from django.forms import widgets
-from .models import Event,Participant,Category
-
+from .models import Event,Category
+from django.contrib.auth.models import User
 class StyledFormMixin:
-    default_classes="border-2 border-gray-300 w-full rounded-lg shadow-sm focus:border-rose-500 focus:ring-rose-500"
+    # default_classes="border-2 border-gray-300 w-full rounded-lg shadow-sm focus:border-rose-500 focus:ring-rose-500"
+    default_classes = (
+        "w-full px-4 py-2 rounded-lg shadow-sm border border-gray-300 rounded-lg "
+        "focus:outline-none focus:ring-2 focus:ring-rose-500 "
+        "focus:border-rose-500"
+    )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
+        
     def apply_styled_widgets(self):
         for field_name,field in self.fields.items():
-            
-            if isinstance(field.widget,forms.CharField):
+            if isinstance(field.widget,(widgets.TextInput,widgets.EmailInput,widgets.PasswordInput,)):
+                field.widget.attrs.update({
+                    "class": self.default_classes,
+                    "placeholder": f"Enter {field.label}",
+                })
+            elif isinstance(field.widget,forms.CharField):
                 field.widget.attrs.update({
                     'class':self.default_classes,
                     'placeholder':f"Enter{field.label.lower()}"
@@ -51,13 +64,10 @@ class EventForm(StyledFormMixin,forms.ModelForm):
         }
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
-        self.fields['participant'].queryset = Participant.objects.filter(participant__isnull=False).distinct()
+        self.fields['participant'].queryset = User.objects.filter(is_staff=False,is_superuser=False).distinct()
         self.apply_styled_widgets()
 
-class ParticipantForm(forms.ModelForm):
-    class Meta:
-        model=Participant
-        fields="__all__"
+
     
 
 class CategoryForm(forms.ModelForm):

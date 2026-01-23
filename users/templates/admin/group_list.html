@@ -1,0 +1,49 @@
+{% extends "admin/dashboard.html" %}
+{% block content %}
+      <h2 class="text-2xl font-bold mb-4">Groups and Permissions</h2>
+      {% if messages %}
+            {% for message in messages %}
+                <p class="text-green-400">{{message}}</p>
+            {% endfor %}
+        {% endif %}
+      
+      <div class="overflow-x-auto">
+        <table class="table-auto w-full border-collapse border border-gray-300">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">Group Name</th>
+              <th class="border border-gray-300 px-4 py-2">Permissions</th>
+              <th class="border px-4 py-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for group in groups %}
+                <tr class="odd:bg-white even:bg-gray-50">
+                <td class="border border-gray-300 px-4 py-2 font-medium">
+                    {{group.name}}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                    <ul class="list-disc list-inside">
+                    {% for permission in group.permission %}
+                        <li>{{permission.name}}</li>
+                    {% empty %}
+                        <span>No permission assigned</span>
+                    {% endfor %}
+                    </ul>
+                </td>
+                <td class="flex justify-center items-center">
+                  <form method="POST" action="{% url 'delete_group' group.id %}" class="flex justify-center items-center bg-blue-300 w-3/4">
+                    {% csrf_token %}
+                    <button class="btn btn-primar shadow-sm text-white px-3 py-1 rounded">
+                        Delete
+                    </button>
+                </form>
+                </td>
+                </tr>
+            {% endfor %}
+            
+            
+          </tbody>
+        </table>
+      </div>
+  {% endblock content %}

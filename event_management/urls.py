@@ -16,15 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from tasks.views import home,search_view,dashboard
+from tasks.views import home,search_view
 from django.conf import settings
 from django.conf.urls.static import static
+from core.views import home,no_permission,nonlogged_dashboard
 # from debug_toolbar.toolbar import debug_toolbar_urls
 urlpatterns = [
-    path('',dashboard,name='home'),
+    path('',nonlogged_dashboard,name='nonlogged_dashboard'),
     path('search/', search_view, name='search_view'),
     path('admin/',admin.site.urls),
     path('tasks/',include("tasks.urls")),
+    path('users/',include("users.urls")),
+    path('core/',include("core.urls")),
+    path('home/',home,name='home1'),
+    path('no_permission/',no_permission,name='no_permission'),
+    
 ] 
 
 # Only import and include debug toolbar if DEBUG is True

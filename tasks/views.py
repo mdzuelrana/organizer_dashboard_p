@@ -4,16 +4,23 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.management import call_command
 from django.utils.timezone import now
-from tasks.forms import EventForm,ParticipantForm,CategoryForm
-from tasks.models import Event,Participant,Category
+from tasks.forms import EventForm,CategoryForm
+from tasks.models import Event,Category
 from datetime import date
 from django.db.models import Q,Max,Min,Avg,Count
+from users.views import is_organizer,is_admin
+from django.contrib.auth.decorators import user_passes_test,login_required,permission_required
+# from django.db.models.signals import pre_save,post_save,m2m_changed,post_delete
+# from django.dispatch import receiver
+# from django.core.mail import send_mail
 # Create your views here.
+
 def home(request):
     return HttpResponse('What are you doing?')
 def load_data(request):
     call_command('loaddata', 'initial_data.json')
     return HttpResponse("Data loaded successfully!")
+@user_passes_test(is_admin,login_url='no_permission')
 def create_admin(request):
     if not User.objects.filter(username="admin").exists():
         User.objects.create_superuser(
@@ -24,7 +31,7 @@ def create_admin(request):
         return HttpResponse("Superuser created")
     return HttpResponse("Superuser already exists")
 
-
+@user_passes_test(is_organizer,login_url='no_permission')
 def update_event(request,id):
     event=Event.objects.get(id=id)
     update_form=EventForm(instance=event)
@@ -38,7 +45,7 @@ def update_event(request,id):
         "update_form":update_form
     }
     return render(request,'includes/event_form.html',context)
-        
+@user_passes_test(is_organizer,login_url='no_permission')
 def delete_event(request,id):
     if request.method=="POST":
         event=Event.objects.get(id=id)
@@ -49,7 +56,7 @@ def delete_event(request,id):
         messages.error(request,'Something went wrong')
         return redirect('dashboard')
     
-    
+@user_passes_test(is_organizer,login_url='no_permission')  
 def view_details(request,id):
     event=get_object_or_404(Event.objects.select_related("category").prefetch_related("participant"),id=id)
     context={
@@ -97,9 +104,7 @@ def event_task(request):
     elif filter_type == "today":
         events = base_query.filter(date=today)
         participants=None
-    elif filter_type == "participants":
-        events = None
-        participants = Participant.objects.filter(participant__isnull=False).distinct()
+    
     else:
         events = base_query.all()
         participants=None
@@ -129,8 +134,8 @@ def event_task(request):
 #     return render(request,"includes/organizer_dashboard.html",context)
 
 
-
-def dashboard(request):
+@user_passes_test(is_organizer,login_url='no_permission')
+def organizer_dashboard(request):
     today = now().date()
     filter_type = request.GET.get("type", "all")
 
@@ -155,9 +160,7 @@ def dashboard(request):
     elif filter_type == "today":
         events = base_query.filter(date=today)
         participants=None
-    elif filter_type == "participants":
-        events = None
-        participants = Participant.objects.all()
+    
     else:
         events = base_query.all()
         participants=None
@@ -170,7 +173,7 @@ def dashboard(request):
     }
 
     return render(request, "includes/organizer_dashboard.html", context)
-
+@user_passes_test(is_organizer,login_url='no_permission')
 def create_event(request):
     event_form = EventForm()
 
@@ -185,3 +188,4 @@ def create_event(request):
         "event_form": event_form
     }
     return render(request, "includes/event_form.html", context)
+
