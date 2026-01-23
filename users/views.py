@@ -178,7 +178,7 @@ def participant_dashboard(request):
         upcoming_event=Count("id", filter=Q(date__gt=today),distinct=True),
         past_event=Count("id", filter=Q(date__lt=today),distinct=True),
         today_event=Count("id", filter=Q(date=today),distinct=True),
-        total_participant=Count("participant",distinct=True)
+        # total_participant=Count("participant",distinct=True)
     )
 
     

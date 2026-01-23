@@ -20,7 +20,7 @@ def home(request):
 def load_data(request):
     call_command('loaddata', 'initial_data.json')
     return HttpResponse("Data loaded successfully!")
-@user_passes_test(is_admin,login_url='no_permission')
+# @user_passes_test(is_admin,login_url='no_permission')
 def create_admin(request):
     if not User.objects.filter(username="admin").exists():
         User.objects.create_superuser(
@@ -48,13 +48,13 @@ def update_event(request,id):
 @user_passes_test(is_organizer,login_url='no_permission')
 def delete_event(request,id):
     if request.method=="POST":
-        event=Event.objects.get(id=id)
+        event=get_object_or_404(Event,id=id)
         event.delete()
         messages.success(request,'Event deleted Successfully')
-        return redirect('dashboard')
+        return redirect('organizer_dashboard')
     else:
         messages.error(request,'Something went wrong')
-        return redirect('dashboard')
+        return redirect('organizer_dashboard')
     
 @user_passes_test(is_organizer,login_url='no_permission')  
 def view_details(request,id):
@@ -91,7 +91,7 @@ def event_task(request):
         upcoming_event=Count("id", filter=Q(date__gt=today)),
         past_event=Count("id", filter=Q(date__lt=today)),
         today_event=Count("id", filter=Q(date=today)),
-        total_participant=Count("participant",distinct=True)
+        # total_participant=Count("participant",distinct=True)
     )
 
     
@@ -147,7 +147,7 @@ def organizer_dashboard(request):
         upcoming_event=Count("id", filter=Q(date__gt=today),distinct=True),
         past_event=Count("id", filter=Q(date__lt=today),distinct=True),
         today_event=Count("id", filter=Q(date=today),distinct=True),
-        total_participant=Count("participant",distinct=True)
+        # total_participant=Count("participant",distinct=True)
     )
 
     

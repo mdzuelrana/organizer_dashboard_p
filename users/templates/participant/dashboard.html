@@ -48,6 +48,11 @@
         </nav>
     </header>
     <main class="m-6">
+        {% if messages %}
+            {% for message in messages %}
+                {{message}}
+            {% endfor %}
+        {% endif %}
         {% block dashboard %}
         
         {% endblock dashboard %}
