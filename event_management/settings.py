@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = 'django-insecure-slb$#d^p=yi4#l1&d5cr7a^^y1p_bnn=!_@q5$ea_l6hprrr3w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -115,7 +115,7 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         # Replace this value with your local database's connection string.
-        default=config('DATABASE_user'),
+        default='postgresql://organizer_dashboard_db_lyof_user:lODvvJTxFKrWQdtWeApf3tGqzVlB6Amn@dpg-d5pq5jur433s73dhj0eg-a.oregon-postgres.render.com/organizer_dashboard_db_lyof',
         conn_max_age=600
     )
 }
@@ -167,10 +167,10 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS',cast=bool)
-EMAIL_PORT = config('EMAIL_PORT')
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_USE_TLS=True
+EMAIL_PORT=587
+EMAIL_HOST_USER='mdzuel.2021@gmail.com'
+EMAIL_HOST_PASSWORD='gjpbqmjuiacnsngo'
 
 FRONTEND_URL='http://127.0.0.1:8000'
