@@ -14,14 +14,14 @@ def send_activation_email(sender,instance,created,**kwargs):
         message=f'Hi {instance.username},\n\nPlease activate your account by clicking the link below \n\n{activation_url}\n\n Thank You'
 
         recipient_list=[instance.email]
-        try:
-            print("EMAIL:", instance.email)
-            print("FROM:", settings.EMAIL_HOST_USER)
-            send_mail(subject,message,settings.EMAIL_HOST_USER,recipient_list,fail_silently=False,)
+        # try:
+        print("EMAIL:", instance.email)
+        print("FROM:", settings.EMAIL_HOST_USER)
+        send_mail(subject,message,settings.EMAIL_HOST_USER,recipient_list,fail_silently=False,)
             
-        except Exception as e:
+        # except Exception as e:
             
-            print(f"Failed to send email at {instance.email}: {e}")
+        #     print(f"Failed to send email at {instance.email}: {e}")
 
 
 
