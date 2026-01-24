@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-slb$#d^p=yi4#l1&d5cr7a^^y1p_bnn=!_@q5$ea_l6hprrr3w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =False
+DEBUG =True
 
 ALLOWED_HOSTS = ['*']
 
@@ -174,3 +174,10 @@ EMAIL_HOST_USER='mdzuel.2021@gmail.com'
 EMAIL_HOST_PASSWORD='gjpbqmjuiacnsngo'
 
 FRONTEND_URL='http://127.0.0.1:8000'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 60 * 60        
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_COOKIE_SECURE = True        
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = True 
