@@ -17,7 +17,7 @@ def send_activation_email(sender,instance,created,**kwargs):
         try:
             print("EMAIL:", instance.email)
             print("FROM:", settings.EMAIL_HOST_USER)
-            send_mail(subject,message,settings.EMAIL_HOST_USER,recipient_list)
+            send_mail(subject,message,settings.EMAIL_HOST_USER,recipient_list,fail_silently=False,)
             
         except Exception as e:
             
