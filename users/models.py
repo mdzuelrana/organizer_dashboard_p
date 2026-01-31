@@ -13,6 +13,7 @@ from django.contrib.auth.models import AbstractUser
 class CustomUser(AbstractUser):
     profile_image=models.ImageField(upload_to='profile_images',blank=True,default='images/admin.jfif')
     bio=models.TimeField(blank=True)
+    phone_number=models.CharField(max_length=30,blank=True)
     
     def __str__(self):
         return self.username 
