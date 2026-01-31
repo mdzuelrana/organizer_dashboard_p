@@ -1,5 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from django.conf import Settings
+
+User=get_user_model()
 # Create your models here.
 class Category(models.Model):
     name=models.CharField(max_length=200)
@@ -19,11 +22,13 @@ class Event(models.Model):
     location=models.CharField(max_length=200)
     category=models.ForeignKey(Category,on_delete=models.CASCADE,related_name='category')
     participant=models.ManyToManyField(User,through='RSVP',related_name='participant')
+    #participant=models.ManyToManyField(Settings.AUTH_USER_MODEL,through='RSVP',related_name='participant')
     def __str__(self):
         return self.name
     
 class RSVP(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
+    #user=models.ForeignKey(Settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     event=models.ForeignKey(Event,on_delete=models.CASCADE)
     rsvp_at=models.DateTimeField(auto_now_add=True)
     

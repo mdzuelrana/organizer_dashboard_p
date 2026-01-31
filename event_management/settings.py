@@ -28,6 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG =False
 
 ALLOWED_HOSTS = ['*']
+#AUTH_USER_MODEL='users.CustomUser'
 
 CSRF_TRUSTED_ORIGIN=['https://*.onrender.com',"http://localhost:8000",'http://127.0.0.1:8000']
 # Application definition
@@ -143,7 +144,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dhaka'
 
 USE_I18N = True
 
@@ -183,10 +184,16 @@ FRONTEND_URL = config(
     'FRONTEND_URL',
     default='http://127.0.0.1:8000'
 )
+LOGIN_URL='/users/sign_in/'
+LOGIN_REDIRECT_URL='/'
+LOGOUT_REDIRECT_URL='/'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 60 * 60        
 SESSION_SAVE_EVERY_REQUEST = True
   
 SESSION_COOKIE_HTTPONLY = True
+
+AUTH_USER_MODEL = 'users.CustomUser'
+
 

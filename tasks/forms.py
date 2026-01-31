@@ -1,7 +1,9 @@
 from django import forms
 from django.forms import widgets
 from .models import Event,Category
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User=get_user_model()
+# from django.contrib.auth.models import User
 class StyledFormMixin:
     # default_classes="border-2 border-gray-300 w-full rounded-lg shadow-sm focus:border-rose-500 focus:ring-rose-500"
     default_classes = (

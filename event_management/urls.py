@@ -23,12 +23,12 @@ from core.views import home,no_permission,nonlogged_dashboard
 # from debug_toolbar.toolbar import debug_toolbar_urls
 urlpatterns = [
     path('',nonlogged_dashboard,name='nonlogged_dashboard'),
-    path('search/', search_view, name='search_view'),
+    path('search/', search_view.as_view(), name='search_view'),
     path('admin/',admin.site.urls),
     path('tasks/',include("tasks.urls")),
     path('users/',include("users.urls")),
     path('core/',include("core.urls")),
-    path('home/',home,name='home1'),
+    path('home/',home.as_view(),name='home1'),
     path('no_permission/',no_permission,name='no_permission'),
     
 ] 

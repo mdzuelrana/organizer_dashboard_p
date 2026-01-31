@@ -1,8 +1,10 @@
 from django.shortcuts import render,redirect
 from django.http import HttpRequest
+from django.views import View
 # Create your views here.
-def home(request):
-    return HttpRequest('how are you')
+class home(View):
+    def get(self,request):
+        return HttpRequest('how are you')
 
 def no_permission(request):
     return render(request,'no_permission.html')
