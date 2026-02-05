@@ -15,6 +15,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.views.generic.base import ContextMixin
 from django.views.generic import ListView,UpdateView,DetailView,TemplateView,CreateView,DeleteView
+from django.urls import reverse_lazy
 # from django.db.models.signals import pre_save,post_save,m2m_changed,post_delete
 # from django.dispatch import receiver
 # from django.core.mail import send_mail
@@ -63,21 +64,27 @@ class update_event(is_organizer,UpdateView):
     context_object_name='event'
     pk_url_kwarg='id'
     login_url='no_permission'
+    def form_valid(self, form):
+        messages.success(self.request, 'Event successfully updated')
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('update_event', kwargs={'id': self.object.id})
     
-    def get_context_data(self, **kwargs):
+    # def get_context_data(self, **kwargs):
         
-        context = super().get_context_data(**kwargs)
-        context["event_form"] = self.get_form()
-        return context
+    #     context = super().get_context_data(**kwargs)
+    #     context["event_form"] = self.get_form()
+    #     return context
         
-    def post(self,request,*args,**kwargs):
-        self.object=self.get_object()
-        update_form=EventForm(request.POST,instance=self.object)
-        if update_form.is_valid():
-            update_form.save()
-            messages.success(request,'Event Successfully Updated')
-            return redirect('update_event',self.object.id)
-        return redirect('update_event',self.object.id)
+    # def post(self,request,*args,**kwargs):
+    #     self.object=self.get_object()
+    #     update_form=EventForm(request.POST,instance=self.object)
+    #     if update_form.is_valid():
+    #         update_form.save()
+    #         messages.success(request,'Event Successfully Updated')
+    #         return redirect('update_event',self.object.id)
+    #     return redirect('update_event',self.object.id)
         
     
 # @user_passes_test(is_organizer,login_url='no_permission')
@@ -97,15 +104,22 @@ class delete_event(is_organizer,DeleteView):
     pk_url_kwarg='id'
     login_url='no_permission'
     
+    success_url = reverse_lazy('organizer_dashboard')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Event deleted successfully')
+        return super().form_valid(form)
+
     
-    def post(self,request,id,*args,**kwargs):
-        event=get_object_or_404(Event,id=id)
-        event.delete()
-        messages.success(request,'Event deleted Successfully')
-        return redirect('organizer_dashboard')
-    def get(self,request,*args,**kwargs):
-        messages.error(request,'Something went wrong')
-        return redirect('organizer_dashboard')
+    
+    # def post(self,request,id,*args,**kwargs):
+    #     event=get_object_or_404(Event,id=id)
+    #     event.delete()
+    #     messages.success(request,'Event deleted Successfully')
+    #     return redirect('organizer_dashboard')
+    # def get(self,request,*args,**kwargs):
+    #     messages.error(request,'Something went wrong')
+    #     return redirect('organizer_dashboard')
     
 # @user_passes_test(is_organizer,login_url='no_permission')  
 # def view_details(request,id):
@@ -124,7 +138,7 @@ class view_details(is_organizer,DetailView):
     pk_url_kwarg='id'
     def get_queryset(self):
          
-        return get_object_or_404(Event.objects.select_related("category").prefetch_related("participant"),id=id)
+        return Event.objects.select_related("category").prefetch_related("participant")
     
     
 
@@ -161,11 +175,7 @@ class search_view(ListView):
         context=super().get_context_data(**kwargs)
         name=self.request.GET.get('q','')
     
-        context={
-            
-            'filter_type': f"search results for '{name}'"
-            
-        }
+        context["filter_type"]=f"search results for '{name}'"
         return context
 
 # def event_task(request):
@@ -208,7 +218,11 @@ class search_view(ListView):
 class event_task(ListView):
     model=Event
     template_name='includes/event_task.html'
-    context_object_name='events'
+    login_url='no_permission'
+    context_object_name="events"
+    
+    
+    
     def get_queryset(self):
         
         today = now().date()
@@ -244,31 +258,29 @@ class event_task(ListView):
 
     
     
-
-        context = {
-            
-            "counts": counts,
-            "filter_type": filter_type,
-            "participants":None
-        }
+        context["counts"]=counts
+        context["filter_type"]=filter_type
+        
+        context["participants"]=None
+        
         return context
     
-# def dashboard(request):
-#     type=request.GET.get('type','all')
-#     today=now().date()
-#     total_event=Event.objects.all().count()
-#     total_participant=Participant.objects.count()
-#     upcoming_event=Event.objects.filter(date__gt=today).count()
-#     past_event=Event.objects.filter(date__lt=today).count()
+def dashboard(request):
+    type=request.GET.get('type','all')
+    today=now().date()
+    total_event=Event.objects.all().count()
+    total_participant=Participant.objects.count()
+    upcoming_event=Event.objects.filter(date__gt=today).count()
+    past_event=Event.objects.filter(date__lt=today).count()
     
-#     context={
-#         "total_event":total_event,
-#         "total_participant":total_participant,
-#         "upcoming_event":upcoming_event,
-#         "past_event":past_event
-#     }
+    context={
+        "total_event":total_event,
+        "total_participant":total_participant,
+        "upcoming_event":upcoming_event,
+        "past_event":past_event
+    }
     
-#     return render(request,"includes/organizer_dashboard.html",context)
+    return render(request,"includes/organizer_dashboard.html",context)
 
 
 
@@ -340,8 +352,8 @@ class create_event(is_organizer,CreateView):
     model=Event
     template_name='includes/event_form.html'
     login_url='no_permission'
-    form_class = EventForm()
-    success_url='create_event'
+    form_class = EventForm
+    success_url=reverse_lazy('create_event')
 
     
     def form_valid(self, form):

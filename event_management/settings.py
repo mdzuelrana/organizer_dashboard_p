@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =False
+DEBUG =True
 
 ALLOWED_HOSTS = ['*']
 #AUTH_USER_MODEL='users.CustomUser'
@@ -116,7 +116,7 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         # Replace this value with your local database's connection string.
-        default='postgresql://organizer_dashboard_db_lyof_user:lODvvJTxFKrWQdtWeApf3tGqzVlB6Amn@dpg-d5pq5jur433s73dhj0eg-a.oregon-postgres.render.com/organizer_dashboard_db_lyof',
+        default='postgresql://event_management_db_ed2v_user:2EBlLN9Z7HpzjOuWaB2zurxOQmybhS8b@dpg-d5v2u0shg0os73a52jf0-a.oregon-postgres.render.com/event_management_db_ed2v',
         conn_max_age=600
     )
 }

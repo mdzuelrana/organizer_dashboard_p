@@ -1,4 +1,5 @@
 {% load static %}
+{% load group_tags %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,13 +11,18 @@
   <body class="font-sans bg-gray-100">
     
     
-   
-    {% if request.user.is_authenticated %}
-        {% include "logged_nav.html" %}
+    {% if request.user|in_group:"Organizer" %}
+      {% include "dashboard.html" %}
+    {% elif request.user.is_superuser or request.user|in_group:"Admin" %}
+      {% include "admin/dashboard.html" %}
+    {% elif request.user|in_group:"Participant" %}
+      {% include "participant/dashboard.html" %}
     {% else %}
-        {% include "non_logged_nav.html" %}
-    
+      {% include "non_logged_nav.html" %}
     {% endif %}
+
+
+    
     {% comment %} <p class="text-red-500">
     Authenticated: {{ request.user.is_authenticated }} |
     User: {{ request.user }} {% endcomment %}

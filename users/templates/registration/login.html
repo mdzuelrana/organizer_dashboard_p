@@ -13,11 +13,26 @@
         {% endif %} {% endcomment %}
         <form action="" method="POST">
             {% csrf_token %}
-            {{form}}
+            {% comment %} {{form}} {% endcomment %}
+            {% for field in form %}
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">
+                    {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% if field.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
             <button class="bg-blue-500 text-white mt-6 w-full py-2 rounded" type="submit">Sign In</button>
         </form>
+        <p class="text-red-300 font-semibold py-6"><a href="{% url 'password_reset' %}">Reset Password</a></p>
 
     </div>
-    <a href="{% url 'password_reset' %}">Reset Password</a>
+    
 
 {% endblock content %}

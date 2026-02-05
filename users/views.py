@@ -74,8 +74,8 @@ class is_admin(UserPassesTestMixin):
         return self.request.user.is_superuser or self.request.user.groups.filter(name='Admin').exists()
 
     login_url = 'no_permission'
-# def is_organizer(user):
-#     return user.groups.filter(name='Organizer').exists()
+def is_admin_user(user):
+    return user.is_superuser or user.groups.filter(name='Admin').exists()
 class is_organizer(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.groups.filter(name='Organizer').exists()
@@ -127,7 +127,7 @@ def activate_user(request,user_id,token):
 #     return render(request,'registration/register.html',context)
 class sign_up(FormView):
     template_name='registration/register.html'
-    form_class=CustomRegisterForm()
+    form_class=CustomRegisterForm
     success_url=reverse_lazy('sign_in')
     def form_valid(self, form):
         user=form.save(commit=False)
@@ -156,8 +156,18 @@ def sign_in(request):
 class CustomLogin(LoginView):
     form_class=LoginForm
     def get_success_url(self):
-        next_url=self.request.GET.get('next')
-        return next_url if next_url else super().get_success_url()
+        next_url = self.request.POST.get('next') or self.request.GET.get('next')
+        if next_url:
+            return next_url
+
+        
+        user = self.request.user
+        if user.is_superuser or user.groups.filter(name='Admin').exists():
+            return reverse_lazy('admin_dashboard')
+        elif user.groups.filter(name='Organizer').exists():
+            return reverse_lazy('organizer_dashboard')
+        else:
+            return reverse_lazy('participant_dashboard')
 # @login_required
 # def sign_out(request):
 #     if request.method=="POST":
@@ -173,13 +183,13 @@ class sign_out(LoginRequiredMixin,View):
     
 
     
-@receiver(post_save,sender=User)
+# @receiver(post_save,sender=User)
 
-def assign_role(sender,instance,created,**kwargs):
-    if created:
-        user_group,created=Group.objects.get_or_create(name='User')
-        instance.groups.add(user_group)
-        instance.save()
+# def assign_role(sender,instance,created,**kwargs):
+#     if created:
+#         user_group,created=Group.objects.get_or_create(name='User')
+#         instance.groups.add(user_group)
+#         instance.save()
         
 # @user_passes_test(is_admin,login_url='no_permission')
 # def admin_dashboard(request):
@@ -193,9 +203,9 @@ def assign_role(sender,instance,created,**kwargs):
 #             user.group_name='No group assigned'
 #     return render(request,'admin/dashboard.html',{"users":users})
 
-class admin_dashboard(UserPassesTestMixin,TemplateView):
+class admin_dashboard(is_admin,TemplateView):
     template_name='admin/dashboard.html'
-    login_url='np_permission'
+    
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
         users=User.objects.prefetch_related(
@@ -209,7 +219,7 @@ class admin_dashboard(UserPassesTestMixin,TemplateView):
         context['users']=users
         return context
    
-@user_passes_test(is_admin,login_url='no_permission')
+@user_passes_test(is_admin_user,login_url='no_permission')
 def assign_role(request,user_id):
     user=User.objects.get(id=user_id)
     form=AssignRoleForm()
@@ -237,7 +247,7 @@ def assign_role(request,user_id):
 class create_group(is_admin,CreateView):
     template_name='admin/create_group.html'
     success_url=reverse_lazy('create_group')
-    form_class=CreateGroupForm()
+    form_class=CreateGroupForm
     def form_valid(self, form):
         group=form.save()
         messages.success(self.request,f'Group {group.name} has been created Successfully')
@@ -273,7 +283,7 @@ class delete_participant(UserPassesTestMixin,View):
     login_url='no_permission'
     
     def test_func(self):
-        return self.request.user.is_superuser()
+        return self.request.user.is_superuser
     def post(self,request,participant_id):
         user=get_object_or_404(User,id=participant_id)
         if user.is_superuser:
@@ -298,7 +308,7 @@ class delete_participant(UserPassesTestMixin,View):
 class delete_group(UserPassesTestMixin,View):
     login_url='no_permission'
     def test_func(self):
-        return self.request.user.is_superuser()
+        return self.request.user.is_superuser
     def post(self,request,group_id):
         group=get_object_or_404(Group,id=group_id)
     
@@ -360,18 +370,18 @@ class participant_dashboard(LoginRequiredMixin,is_participant,ListView):
 
         base_query = Event.objects.select_related("category").prefetch_related("participant")
         if filter_type == "upcoming":
-            events = base_query.filter(date__gt=today)
-            participants=None
+            return base_query.filter(date__gt=today)
+            
         elif filter_type == "past":
-            events = base_query.filter(date__lt=today)
-            participants=None
+            return base_query.filter(date__lt=today)
+            
         elif filter_type == "today":
-            events = base_query.filter(date=today)
-            participants=None
+            return base_query.filter(date=today)
+            
         
         else:
-            events = base_query.all()
-            participants=None
+            return base_query.all()
+            
 
     def get_context_data(self, **kwargs):
         context=super().get_context_data(**kwargs)
@@ -387,13 +397,10 @@ class participant_dashboard(LoginRequiredMixin,is_participant,ListView):
 
     
     
-
-        context = {
-            
-            "counts": counts,
-            "filter_type": filter_type,
-            "participants":None
-        }
+        context["counts"]=counts
+        context["filter_type"]=filter_type
+        context["participants"]=None
+        
         return context
 
    
@@ -416,6 +423,7 @@ class ProfileView(TemplateView):
 class ChangePassword(PasswordChangeView):
     template_name='accounts/password_change.html'
     form_class=CustomPasswordChangeForm
+    success_url=reverse_lazy('profile')
 
 
 class CustomPasswordResetView(PasswordResetView):

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import organizer_dashboard,create_event,event_task,view_details,delete_event,update_event,load_data
+from .views import organizer_dashboard,create_event,event_task,view_details,delete_event,update_event,load_data,ViewDetails
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [

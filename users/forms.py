@@ -119,6 +119,7 @@ class CustomPasswordResetConfirmForm(StyledFormMixin,SetPasswordForm):
             
             
 class EditProfileForm(StyledFormMixin,forms.ModelForm):
-    model=CustomUser
-    fields=['email','first_name','last_name','bio','profile_image']
-    
+    class Meta:
+        model=CustomUser
+        fields=['email','first_name','last_name','bio','profile_image']
+        
